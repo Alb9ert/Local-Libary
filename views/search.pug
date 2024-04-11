@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    h1 Search for book or author 
+
+    form#searchbar(method="get" action="/search/results" enctype="multipart/form-data")
+      input(type="text" name="searched")
+      button.btn.btn-primary(type="submit") Search
