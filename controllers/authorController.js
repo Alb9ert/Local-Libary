@@ -2,10 +2,28 @@
 const { body, validationResult } = require("express-validator");
 const Book = require("../models/book");
 
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./public/uploads");
+  },
+  filename: async (req, file, cb) => {
+    // Get the author's ID from the request parameters
+    const authorId = req.params.id;
+
+    // Construct the filename using the author's ID and the original file extension
+    const fileName = `${authorId}.${file.originalname.split(".").pop()}`;
+
+    cb(null, fileName);
+  },
+});
+
+const upload = multer({ storage: storage });
+
 const Author = require("../models/author");
 const asyncHandler = require("express-async-handler");
 
-// Display list of all Authors.
 // Display list of all Authors.
 exports.author_list = asyncHandler(async (req, res, next) => {
   const allAuthors = await Author.find().sort({ family_name: 1 }).exec();
@@ -16,7 +34,7 @@ exports.author_list = asyncHandler(async (req, res, next) => {
 });
 
 // Display detail page for a specific Author.
-exports.author_detail = asyncHandler(async (req, res, next) => {
+exports.author_detail_get = asyncHandler(async (req, res, next) => {
   // Get details of author and all their books (in parallel)
   const [author, allBooksByAuthor] = await Promise.all([
     Author.findById(req.params.id).exec(),
@@ -37,6 +55,37 @@ exports.author_detail = asyncHandler(async (req, res, next) => {
   });
 });
 
+exports.author_detail_post = [
+  upload.single("image"),
+  asyncHandler(async (req, res, next) => {
+    // Get the author's ID from the request parameters
+    const authorId = req.params.id;
+
+    // Construct the image path using the filename provided by multer
+    const imagePath = "/uploads/" + authorId + ".jpg";
+
+    try {
+      // Find the author by ID and update the image_path field with the new path
+      const author = await Author.findByIdAndUpdate(
+        authorId,
+        { image_path: imagePath },
+        { new: true }
+      );
+
+      if (!author) {
+        const err = new Error("Author not found");
+        err.status = 404;
+        throw err;
+      }
+
+      // Redirect back to the parent page or wherever you want
+      res.redirect("..");
+    } catch (error) {
+      // Handle errors
+      next(error);
+    }
+  }),
+];
 // Display Author create form on GET.
 exports.author_create_get = (req, res, next) => {
   res.render("author_form", { title: "Create Author" });

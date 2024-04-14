@@ -3,6 +3,14 @@ extends layout
 block content
 
   h1 Author: #{author.name}
+  
+  
+  if author.image_path
+    img(src=author.image_path, alt=author.name, style='max-width: 300px; border: 1px solid #ccc; border-radius: 60px')
+    br
+    br
+
+
   p #{author.date_of_birth} - #{author.date_of_death}
 
   div(style='margin-left:20px;margin-top:20px')
@@ -15,8 +23,12 @@ block content
             a(href=book.url) #{book.title}
           dd #{book.summary}
 
-      p
-      a(href=author.url+'/upload') Upload image
     else
       p This author has no books.
 
+    br
+
+    p 
+      form(method="post", enctype="multipart/form-data")
+          input(type="file" name="image")
+          button(type="submit") Upload Image

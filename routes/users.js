@@ -12,5 +12,3 @@ router.get("/cool", (req, res, next) => {
 });
 
 module.exports = router;
-
-// mongodb+srv://albe2184:<cxq59gat>@cluster0.rlnogwc.mongodb.net/local_library?retryWrites=true&w=majority&appName=Cluster0

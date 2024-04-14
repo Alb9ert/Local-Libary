@@ -33,12 +33,22 @@ exports.index = asyncHandler(async (req, res, next) => {
   });
 });
 
-// Display search page
-exports.search = asyncHandler(async (req, res, next) => {
+/* GET search page */
+exports.search_get = asyncHandler(async (req, res, next) => {
   res.render("search");
 });
 
-exports.search_results = asyncHandler(async (req, res, next) => {
+/* POST search page */
+exports.search_post = asyncHandler(async (req, res, next) => {
+  const searched = req.body.searched;
+
+  console.log(searched);
+
+  res.render("results");
+});
+
+/* Display results */
+exports.search_results_get = asyncHandler(async (req, res, next) => {
   res.render("results");
 });
 
