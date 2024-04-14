@@ -1,5 +1,5 @@
-var createError = require("http-errors");
-var express = require("express");
+const createError = require("http-errors");
+const express = require("express");
 
 // Set up mongoose connection
 const mongoose = require("mongoose");

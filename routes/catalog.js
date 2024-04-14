@@ -9,16 +9,20 @@ const book_instance_controller = require("../controllers/bookinstanceController"
 
 /// HOME PAGE AND SEARCH PAGE ///
 
-// GET catalog home page.
+// GET catalog home page
 router.get("/", book_controller.index);
 
-// Get search page.
-router.get("/search", book_controller.search);
+/* GET search page.*/
+router.get("/search", book_controller.search_get);
 
-// Get search page.
-router.get("/search/results", book_controller.search_results);
+/* POST search page. */
+router.post("/search", book_controller.search_post);
+
+/* GET results page. */
+router.get("/results", book_controller.search_results_get);
 
 /// BOOK ROUTES ///
+
 // GET request for creating a Book. NOTE This must come before routes that display Book (uses id).
 router.get("/book/create", book_controller.book_create_get);
 
@@ -64,7 +68,10 @@ router.post("/author/:id/delete", author_controller.author_delete_post);
 // router.post("/author/:id/update", author_controller.author_update_post);
 
 // GET request for one Author.
-router.get("/author/:id", author_controller.author_detail);
+router.get("/author/:id", author_controller.author_detail_get);
+
+// POST request for one Author.
+router.post("/author/:id", author_controller.author_detail_post);
 
 // GET request for list of all Authors.
 router.get("/authors", author_controller.author_list);

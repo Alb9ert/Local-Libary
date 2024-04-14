@@ -15,7 +15,6 @@ exports.genre_list = asyncHandler(async (req, res, next) => {
 });
 
 // Display detail page for a specific Genre.
-// Display detail page for a specific Genre.
 exports.genre_detail = asyncHandler(async (req, res, next) => {
   // Get details of genre and all associated books (in parallel)
   const [genre, booksInGenre] = await Promise.all([
@@ -37,12 +36,10 @@ exports.genre_detail = asyncHandler(async (req, res, next) => {
 });
 
 // Display Genre create form on GET.
-// Display Genre create form on GET.
 exports.genre_create_get = (req, res, next) => {
   res.render("genre_form", { title: "Create Genre" });
 };
 
-// Handle Genre create on POST.
 // Handle Genre create on POST.
 exports.genre_create_post = [
   // Validate and sanitize the name field.
