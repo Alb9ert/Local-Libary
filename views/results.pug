@@ -1,4 +1,25 @@
 extends layout
- 
+
 block content
-    h2 Test
+  h1 Search results for #{title}
+  if found_books.length
+    ul
+      each book in found_books
+        li
+          a(href=book.url) #{book.title}
+          |  (#{book.author.name})
+
+  else
+    p No books found.
+
+  if found_authors.length
+    ul
+      each author in found_authors
+        li
+          a(href=author.url) #{author.name}
+          |  (#{author.date_of_birth} - #{author.date_of_death})
+  else
+    p No authors found
+
+  br
+  a(href="/catalog/search") Return to search page 

@@ -6,6 +6,7 @@ const Genre = require("../models/genre");
 const BookInstance = require("../models/bookinstance");
 
 const asyncHandler = require("express-async-handler");
+const book = require("../models/book");
 
 exports.index = asyncHandler(async (req, res, next) => {
   // Get details of books, book instances, authors and genre counts (in parallel)
@@ -44,7 +45,29 @@ exports.search_post = asyncHandler(async (req, res, next) => {
 
   console.log(searched);
 
-  res.render("results");
+  const allBooks = await Book.find({}, "title author")
+    .sort({ title: 1 })
+    .populate("author")
+    .exec();
+
+  const allAuthors = await Author.find().sort({ family_name: 1 }).exec();
+
+  const filteredBooks = allBooks.filter((book) =>
+    book.title.includes(searched)
+  );
+
+  const filteredAuthors = allAuthors.filter((author) => {
+    return (
+      author.first_name.includes(searched) ||
+      author.family_name.includes(searched)
+    );
+  });
+
+  res.render("results", {
+    title: searched,
+    found_books: filteredBooks,
+    found_authors: filteredAuthors,
+  });
 });
 
 /* Display results */
